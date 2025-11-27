@@ -14,8 +14,7 @@ import { TrainersService } from './services/trainers.service';
 import { CreateTrainerDto } from './dto/create-trainer.dto';
 import { UpdateTrainerDto } from './dto/update-trainer.dto';
 import { Trainers } from './entities/trainers.entity';
-import { validStreetCodeBR } from './utils'
-import { BadRequestException } from '@nestjs/common';
+
 
 @Controller('trainers')
 export class TrainersController {
@@ -25,11 +24,6 @@ export class TrainersController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createTrainerDto: CreateTrainerDto): Promise<Trainers> {
-
-    if(!validStreetCodeBR(createTrainerDto.cep)){
-        throw new BadRequestException('CEP inválido');
-    }
-
     return this.trainersService.create(createTrainerDto);
   }
 

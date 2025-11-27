@@ -17,17 +17,12 @@ const common_1 = require("@nestjs/common");
 const trainers_service_1 = require("./services/trainers.service");
 const create_trainer_dto_1 = require("./dto/create-trainer.dto");
 const update_trainer_dto_1 = require("./dto/update-trainer.dto");
-const utils_1 = require("./utils");
-const common_2 = require("@nestjs/common");
 let TrainersController = class TrainersController {
     trainersService;
     constructor(trainersService) {
         this.trainersService = trainersService;
     }
     create(createTrainerDto) {
-        if (!(0, utils_1.validStreetCodeBR)(createTrainerDto.cep)) {
-            throw new common_2.BadRequestException('CEP inválido');
-        }
         return this.trainersService.create(createTrainerDto);
     }
     findAll() {

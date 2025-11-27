@@ -5,6 +5,8 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './modules/app/app.controller';
 import { AppService } from './modules/app/app.service';
 import { TrainersModule } from './modules/trainers/trainers.module';
+import { TeamsModule } from './modules/teams/teams.module';
+
 
 
 @Module({
@@ -23,7 +25,8 @@ import { TrainersModule } from './modules/trainers/trainers.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true, // apenas em desenvolvimento!
     }),
-    TrainersModule
+    TrainersModule,
+    TeamsModule
   ],
   controllers: [AppController],
   providers: [AppService],

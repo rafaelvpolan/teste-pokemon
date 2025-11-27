@@ -12,12 +12,13 @@ const typeorm_1 = require("@nestjs/typeorm");
 const trainers_controller_1 = require("./trainers.controller");
 const trainers_service_1 = require("./services/trainers.service");
 const trainers_entity_1 = require("./entities/trainers.entity");
+const cep_module_1 = require("../external_apis/cep/cep.module");
 let TrainersModule = class TrainersModule {
 };
 exports.TrainersModule = TrainersModule;
 exports.TrainersModule = TrainersModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([trainers_entity_1.Trainers])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([trainers_entity_1.Trainers]), cep_module_1.CepModule],
         controllers: [trainers_controller_1.TrainersController],
         providers: [trainers_service_1.TrainersService],
         exports: [trainers_service_1.TrainersService],

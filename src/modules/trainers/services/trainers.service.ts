@@ -5,16 +5,37 @@ import { Repository } from 'typeorm';
 import { Trainers } from '../entities/trainers.entity';
 import { CreateTrainerDto } from '../dto/create-trainer.dto';
 import { UpdateTrainerDto } from '../dto/update-trainer.dto';
-
+import { validStreetCodeBR } from './../utils'
+import { BadRequestException } from '@nestjs/common';
+import { CepService } from '../../external_apis/cep/cep.service'
+import { ViaCepResponse } from '../../external_apis/cep/viacep-response.interface';
 @Injectable()
 export class TrainersService {
   constructor(
     @InjectRepository(Trainers)
     private trainersRepository: Repository<Trainers>,
+    private readonly cepService: CepService // injetar o serviço
   ) {}
 
   // CREATE
   async create(createTrainerDto: CreateTrainerDto): Promise<Trainers> {
+
+    
+    if(!validStreetCodeBR(createTrainerDto.cep)){
+        throw new BadRequestException('CEP inválido');
+    }
+    const findInfoAddress: ViaCepResponse  = await this.cepService.findCep(createTrainerDto.cep);
+
+    let newData = createTrainerDto;
+
+    if (findInfoAddress) {
+      newData.city = findInfoAddress.localidade;
+      newData.neighborhood = findInfoAddress.bairro;
+      newData.state = findInfoAddress.uf;
+      newData.street = findInfoAddress.logradouro;
+    }
+
+
     const trainer = this.trainersRepository.create(createTrainerDto);
     return await this.trainersRepository.save(trainer);
   }

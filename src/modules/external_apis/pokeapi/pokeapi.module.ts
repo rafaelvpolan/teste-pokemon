@@ -1,4 +1,3 @@
-// src/modules/external_apis/pokeapi/pokeapi.module.ts
 import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import { PokeApiService } from './pokeapi.service';

@@ -1,4 +1,3 @@
-// src/modules/external_apis/pokeapi/pokeapi.service.ts
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';

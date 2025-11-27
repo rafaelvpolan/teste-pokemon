@@ -1,4 +1,5 @@
-// src/modules/teams/teams.service.ts
+// teams.service.ts
+
 import { 
   Injectable, 
   NotFoundException, 
@@ -16,6 +17,10 @@ import { PokemonService } from '../pokemon/pokemon.service';
 import { CreateTeamDto } from './dto/create-team.dto';
 import { UpdateTeamDto } from './dto/update-team.dto';
 
+/**
+ * Serviço responsável pela gestão de times
+ * Gerencia CRUD de times e suas associações com treinadores e Pokémons
+ */
 @Injectable()
 export class TeamsService {
   constructor(
@@ -37,20 +42,32 @@ export class TeamsService {
     private readonly pokemonService: PokemonService,
   ) {}
 
-  // CREATE
+  /**
+   * Cria um novo time
+   * @param createTeamDto - Dados para criação do time
+   * @returns Time criado
+   */
   async create(createTeamDto: CreateTeamDto): Promise<Teams> {
     const team = this.teamsRepository.create(createTeamDto);
     return await this.teamsRepository.save(team);
   }
 
-  // READ ALL
+  /**
+   * Lista todos os times com suas relações
+   * @returns Array de times com treinadores e Pokémons
+   */
   async findAll(): Promise<Teams[]> {
     return await this.teamsRepository.find({
       relations: ['teamTrainers', 'teamTrainers.trainer', 'teamPokemons', 'teamPokemons.pokemon'],
     });
   }
 
-  // READ ONE
+  /**
+   * Busca um time por ID com todas as relações
+   * @param id - ID do time
+   * @returns Time encontrado
+   * @throws NotFoundException se o time não existir
+   */
   async findOne(id: number): Promise<Teams> {
     const team = await this.teamsRepository.findOne({
       where: { id },
@@ -64,14 +81,24 @@ export class TeamsService {
     return team;
   }
 
-  // UPDATE
+  /**
+   * Atualiza os dados de um time
+   * @param id - ID do time
+   * @param updateTeamDto - Dados para atualização
+   * @returns Time atualizado
+   * @throws NotFoundException se o time não existir
+   */
   async update(id: number, updateTeamDto: UpdateTeamDto): Promise<Teams> {
     const team = await this.findOne(id);
     Object.assign(team, updateTeamDto);
     return await this.teamsRepository.save(team);
   }
 
-  // DELETE
+  /**
+   * Remove um time e todas as suas associações em cascata
+   * @param id - ID do time
+   * @throws NotFoundException se o time não existir
+   */
   async remove(id: number): Promise<void> {
     const team = await this.findOne(id);
     // CASCADE vai remover automaticamente:
@@ -82,6 +109,15 @@ export class TeamsService {
 
   // ========== TRAINER METHODS ==========
 
+  /**
+   * Associa um treinador a um time
+   * Um time pode ter apenas 1 treinador
+   * @param teamId - ID do time
+   * @param trainerId - ID do treinador
+   * @returns Associação criada
+   * @throws NotFoundException se o time ou treinador não existir
+   * @throws ConflictException se o time já tiver um treinador
+   */
   async assignTrainer(teamId: number, trainerId: number): Promise<TeamTrainer> {
     const team = await this.findOne(teamId);
     
@@ -111,6 +147,11 @@ export class TeamsService {
     return await this.teamTrainersRepository.save(teamTrainer);
   }
 
+  /**
+   * Remove a associação entre um time e seu treinador
+   * @param teamId - ID do time
+   * @throws NotFoundException se não houver treinador associado
+   */
   async removeTrainer(teamId: number): Promise<void> {
     const assignment = await this.teamTrainersRepository.findOne({
       where: { team: { id: teamId } },
@@ -125,6 +166,13 @@ export class TeamsService {
     await this.teamTrainersRepository.remove(assignment);
   }
 
+  /**
+   * Lista todos os times de um treinador
+   * Um treinador pode ter múltiplos times
+   * @param trainerId - ID do treinador
+   * @returns Array de times do treinador
+   * @throws NotFoundException se o treinador não existir
+   */
   async getTeamsByTrainer(trainerId: number): Promise<Teams[]> {
     const trainer = await this.trainersRepository.findOne({
       where: { id: trainerId },
@@ -142,6 +190,11 @@ export class TeamsService {
     return teamTrainers.map(tt => tt.team);
   }
 
+  /**
+   * Busca o treinador associado a um time
+   * @param teamId - ID do time
+   * @returns Treinador ou null se não houver
+   */
   async getTrainerByTeam(teamId: number): Promise<Trainers | null> {
     const teamTrainer = await this.teamTrainersRepository.findOne({
       where: { team: { id: teamId } },
@@ -153,7 +206,16 @@ export class TeamsService {
 
   // ========== POKEMON METHODS ==========
 
-  // Adicionar Pokémon ao time por ID
+  /**
+   * Adiciona um Pokémon ao time por ID
+   * Máximo de 5 Pokémons por time
+   * @param teamId - ID do time
+   * @param pokemonId - ID do Pokémon
+   * @returns Associação criada
+   * @throws NotFoundException se o time ou Pokémon não existir
+   * @throws BadRequestException se o time já tiver 5 Pokémons
+   * @throws ConflictException se o Pokémon já estiver no time
+   */
   async addPokemon(teamId: number, pokemonId: number): Promise<TeamPokemon> {
     const team = await this.findOne(teamId);
 
@@ -199,7 +261,16 @@ export class TeamsService {
     return await this.teamPokemonsRepository.save(teamPokemon);
   }
 
-  // Adicionar Pokémon ao time por nome (busca na API se não existir)
+  /**
+   * Adiciona um Pokémon ao time por nome
+   * Busca o Pokémon no banco ou na PokeAPI se não existir
+   * @param teamId - ID do time
+   * @param pokemonName - Nome do Pokémon
+   * @returns Associação criada
+   * @throws NotFoundException se o time não existir ou Pokémon não for encontrado na API
+   * @throws BadRequestException se o time já tiver 5 Pokémons
+   * @throws ConflictException se o Pokémon já estiver no time
+   */
   async addPokemonByName(teamId: number, pokemonName: string): Promise<TeamPokemon> {
     // Buscar ou criar o Pokémon (busca na API se não existir)
     const pokemon = await this.pokemonService.findOrCreate(pokemonName);
@@ -207,7 +278,12 @@ export class TeamsService {
     return await this.addPokemon(teamId, pokemon.id);
   }
 
-  // Remover Pokémon do time
+  /**
+   * Remove um Pokémon do time
+   * @param teamId - ID do time
+   * @param pokemonId - ID do Pokémon
+   * @throws NotFoundException se a associação não existir
+   */
   async removePokemon(teamId: number, pokemonId: number): Promise<void> {
     const assignment = await this.teamPokemonsRepository.findOne({
       where: { 
@@ -226,7 +302,12 @@ export class TeamsService {
     await this.teamPokemonsRepository.remove(assignment);
   }
 
-  // Listar Pokémons de um time
+  /**
+   * Lista todos os Pokémons de um time ordenados por posição
+   * @param teamId - ID do time
+   * @returns Array de Pokémons do time
+   * @throws NotFoundException se o time não existir
+   */
   async getPokemonsByTeam(teamId: number): Promise<Pokemon[]> {
     const team = await this.findOne(teamId);
 
@@ -239,7 +320,12 @@ export class TeamsService {
     return teamPokemons.map(tp => tp.pokemon);
   }
 
-  // Listar times que possuem um Pokémon específico
+  /**
+   * Lista todos os times que possuem um Pokémon específico
+   * @param pokemonId - ID do Pokémon
+   * @returns Array de times que possuem o Pokémon
+   * @throws NotFoundException se o Pokémon não existir
+   */
   async getTeamsByPokemon(pokemonId: number): Promise<Teams[]> {
     const pokemon = await this.pokemonsRepository.findOne({
       where: { id: pokemonId },
@@ -257,7 +343,13 @@ export class TeamsService {
     return teamPokemons.map(tp => tp.team);
   }
 
-  // Obter detalhes completos do time
+  /**
+   * Retorna detalhes completos e formatados de um time
+   * Inclui informações do treinador e Pokémons
+   * @param teamId - ID do time
+   * @returns Objeto com detalhes completos do time
+   * @throws NotFoundException se o time não existir
+   */
   async getTeamDetails(teamId: number) {
     const team = await this.findOne(teamId);
     const trainer = await this.getTrainerByTeam(teamId);

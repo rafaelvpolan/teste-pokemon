@@ -1,4 +1,3 @@
-// cep/cep.service.ts
 import { Injectable, HttpException, HttpStatus, BadRequestException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';

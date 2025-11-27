@@ -1,9 +1,15 @@
+// pokemon.service.ts
+
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Pokemon } from './entities/pokemon.entity';
 import { PokeApiService } from '../external_apis/pokeapi/pokeapi.service';
 
+/**
+ * Serviço responsável pela gestão de Pokémons
+ * Integra dados do banco local com a PokeAPI
+ */
 @Injectable()
 export class PokemonService {
   constructor(
@@ -12,7 +18,13 @@ export class PokemonService {
     private readonly pokeApiService: PokeApiService,
   ) {}
 
-  // Buscar no banco ou na API e salvar
+  /**
+   * Busca um Pokémon no banco de dados ou na PokeAPI
+   * Se não existir no banco, busca na API e salva automaticamente
+   * @param nameOrId - Nome do Pokémon (string) ou número da Pokédex (number)
+   * @returns Pokémon encontrado ou criado
+   * @throws NotFoundException se o Pokémon não for encontrado na API
+   */
   async findOrCreate(nameOrId: string | number): Promise<Pokemon> {
     // Tentar buscar no banco primeiro
     const pokemonInDb = await this.pokemonRepository.findOne({
@@ -38,7 +50,12 @@ export class PokemonService {
     return await this.savePokemonFromApi(pokemonFromApi);
   }
 
-  // Salvar Pokémon da API no banco
+  /**
+   * Converte dados da PokeAPI para o formato do banco e salva
+   * @param apiData - Dados retornados pela PokeAPI
+   * @returns Pokémon salvo no banco
+   * @private
+   */
   private async savePokemonFromApi(apiData: any): Promise<Pokemon> {
     const pokemon = this.pokemonRepository.create({
       name: apiData.name,
@@ -63,12 +80,20 @@ export class PokemonService {
     return await this.pokemonRepository.save(pokemon);
   }
 
-  // Listar todos do Banco
+  /**
+   * Lista todos os Pokémons salvos no banco de dados
+   * @returns Array de Pokémons
+   */
   async findAll(): Promise<Pokemon[]> {
     return await this.pokemonRepository.find();
   }
 
-  // BUscar por ID no banco
+  /**
+   * Busca um Pokémon por ID no banco de dados
+   * @param id - ID do Pokémon no banco
+   * @returns Pokémon encontrado
+   * @throws NotFoundException se o Pokémon não existir
+   */
   async findOne(id: number): Promise<Pokemon> {
     const pokemon = await this.pokemonRepository.findOne({ where: { id } });
     
@@ -79,7 +104,12 @@ export class PokemonService {
     return pokemon;
   }
 
-  // Buscar por nome no banco
+  /**
+   * Busca um Pokémon por nome no banco de dados
+   * @param name - Nome do Pokémon
+   * @returns Pokémon encontrado
+   * @throws NotFoundException se o Pokémon não existir
+   */
   async findByName(name: string): Promise<Pokemon> {
     const pokemon = await this.pokemonRepository.findOne({ 
       where: { name: name.toLowerCase() } 
@@ -92,13 +122,22 @@ export class PokemonService {
     return pokemon;
   }
 
-  // Deletar do banco
+  /**
+   * Remove um Pokémon do banco de dados
+   * Só é possível deletar se não estiver associado a nenhum time (RESTRICT)
+   * @param id - ID do Pokémon
+   * @throws NotFoundException se o Pokémon não existir
+   */
   async remove(id: number): Promise<void> {
     const pokemon = await this.findOne(id);
     await this.pokemonRepository.remove(pokemon);
   }
 
-  // Buscar por tipo
+  /**
+   * Busca Pokémons por tipo
+   * @param type - Tipo do Pokémon (ex: fire, water, electric)
+   * @returns Array de Pokémons do tipo especificado
+   */
   async findByType(type: string): Promise<Pokemon[]> {
     const pokemons = await this.pokemonRepository
       .createQueryBuilder('pokemon')
@@ -108,7 +147,11 @@ export class PokemonService {
     return pokemons;
   }
 
-  // Importar múltiplos Pokémons da API
+  /**
+   * Importa múltiplos Pokémons da PokeAPI em lote
+   * @param limit - Quantidade de Pokémons a importar (padrão: 20)
+   * @returns Array de Pokémons importados
+   */
   async importFromApi(limit: number = 20): Promise<Pokemon[]> {
     const { results } = await this.pokeApiService.listPokemons(limit, 0);
     

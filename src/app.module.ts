@@ -2,8 +2,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AppController } from './modules/app/app.controller';
+import { AppService } from './modules/app/app.service';
+import { TrainersModule } from './modules/trainers/trainers.module';
 
 
 @Module({
@@ -22,6 +23,7 @@ import { AppService } from './app.service';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true, // apenas em desenvolvimento!
     }),
+    TrainersModule
   ],
   controllers: [AppController],
   providers: [AppService],

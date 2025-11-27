@@ -10,8 +10,9 @@ exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const config_1 = require("@nestjs/config");
-const app_controller_1 = require("./app.controller");
-const app_service_1 = require("./app.service");
+const app_controller_1 = require("./modules/app/app.controller");
+const app_service_1 = require("./modules/app/app.service");
+const trainers_module_1 = require("./modules/trainers/trainers.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -32,6 +33,7 @@ exports.AppModule = AppModule = __decorate([
                 entities: [__dirname + '/**/*.entity{.ts,.js}'],
                 synchronize: true,
             }),
+            trainers_module_1.TrainersModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

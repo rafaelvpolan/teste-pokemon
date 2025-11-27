@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './user.entity';
+import { Trainers } from './entities/trainers.entity';
 
 @Injectable()
-export class UserService {
+export class TrainersService {
   constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
+    @InjectRepository(Trainers)
+    private userRepository: Repository<Trainers>,
   ) {}
 
-  findAll(): Promise<User[]> {
+  findAll(): Promise<Trainers[]> {
     return this.userRepository.find();
   }
 }

@@ -10,7 +10,7 @@ exports.TrainersModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const trainers_controller_1 = require("./trainers.controller");
-const trainers_service_1 = require("./trainers.service");
+const trainers_service_1 = require("./services/trainers.service");
 const trainers_entity_1 = require("./entities/trainers.entity");
 let TrainersModule = class TrainersModule {
 };

@@ -38,15 +38,6 @@ export class TeamPokemon {
   pokemon: Pokemon;
 
   @ApiProperty({
-    example: 1,
-    description: 'Posição do Pokémon no time (1-5)',
-    minimum: 1,
-    maximum: 5
-  })
-  @Column({ default: 1 })
-  position: number;
-
-  @ApiProperty({
     example: '2024-01-01T00:00:00.000Z',
     description: 'Data em que o Pokémon foi adicionado ao time'
   })

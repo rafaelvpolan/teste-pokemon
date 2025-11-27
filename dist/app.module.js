@@ -14,6 +14,7 @@ const app_controller_1 = require("./modules/app/app.controller");
 const app_service_1 = require("./modules/app/app.service");
 const trainers_module_1 = require("./modules/trainers/trainers.module");
 const teams_module_1 = require("./modules/teams/teams.module");
+const pokemon_module_1 = require("./modules/pokemon/pokemon.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -35,7 +36,8 @@ exports.AppModule = AppModule = __decorate([
                 synchronize: true,
             }),
             trainers_module_1.TrainersModule,
-            teams_module_1.TeamsModule
+            teams_module_1.TeamsModule,
+            pokemon_module_1.PokemonModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

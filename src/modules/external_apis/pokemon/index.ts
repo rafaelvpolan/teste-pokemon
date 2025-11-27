@@ -1,5 +1,0 @@
-class PokeApi {
-    constructor(parameters) {
-        
-    }
-}

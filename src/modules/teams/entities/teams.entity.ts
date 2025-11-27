@@ -1,4 +1,4 @@
-
+// src/modules/teams/entities/team.entity.ts
 import { 
   Entity, 
   Column, 
@@ -8,6 +8,7 @@ import {
   UpdateDateColumn 
 } from 'typeorm';
 import { TeamTrainer } from './team-trainer.entity';
+import { TeamPokemon } from './team-pokemon.entity';
 
 @Entity('teams')
 export class Teams {
@@ -20,8 +21,11 @@ export class Teams {
   @Column({ default: true })
   status: boolean;
 
-  @OneToMany(() => TeamTrainer, teamTrainer => teamTrainer.team)
+  @OneToMany(() => TeamTrainer, teamTrainer => teamTrainer.team, { cascade: true })
   teamTrainers: TeamTrainer[];
+
+  @OneToMany(() => TeamPokemon, teamPokemon => teamPokemon.team, { cascade: true })
+  teamPokemons: TeamPokemon[];
 
   @CreateDateColumn()
   createdAt: Date;

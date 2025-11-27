@@ -6,7 +6,7 @@ import { AppController } from './modules/app/app.controller';
 import { AppService } from './modules/app/app.service';
 import { TrainersModule } from './modules/trainers/trainers.module';
 import { TeamsModule } from './modules/teams/teams.module';
-
+import { PokemonModule } from './modules/pokemon/pokemon.module';
 
 
 @Module({
@@ -26,7 +26,8 @@ import { TeamsModule } from './modules/teams/teams.module';
       synchronize: true, // apenas em desenvolvimento!
     }),
     TrainersModule,
-    TeamsModule
+    TeamsModule,
+    PokemonModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -28,10 +28,10 @@ Content-Type: application/json
   "id": 1,
   "name": "João Silva",
   "cep": "01310-100",
-  "logradouro": "Av. Paulista",
-  "bairro": "Bela Vista",
-  "cidade": "São Paulo",
-  "estado": "SP",
+  "street": "Av. Paulista",
+  "neighborhood": "Bela Vista",
+  "city": "São Paulo",
+  "state": "SP",
   "createdAt": "2024-01-01T00:00:00.000Z",
   "updatedAt": "2024-01-01T00:00:00.000Z"
 }
@@ -51,10 +51,10 @@ GET http://localhost:3005/trainers
     "id": 1,
     "name": "João Silva",
     "cep": "01310-100",
-    "logradouro": "Av. Paulista",
-    "bairro": "Bela Vista",
-    "cidade": "São Paulo",
-    "estado": "SP",
+    "street": "Av. Paulista",
+    "neighborhood": "Bela Vista",
+    "city": "São Paulo",
+    "state": "SP",
     "createdAt": "2024-01-01T00:00:00.000Z",
     "updatedAt": "2024-01-01T00:00:00.000Z"
   }
@@ -74,10 +74,10 @@ GET http://localhost:3005/trainers/1
   "id": 1,
   "name": "João Silva",
   "cep": "01310-100",
-  "logradouro": "Av. Paulista",
-  "bairro": "Bela Vista",
-  "cidade": "São Paulo",
-  "estado": "SP",
+  "street": "Av. Paulista",
+  "neighborhood": "Bela Vista",
+  "city": "São Paulo",
+  "state": "SP",
   "createdAt": "2024-01-01T00:00:00.000Z",
   "updatedAt": "2024-01-01T00:00:00.000Z"
 }
@@ -102,10 +102,10 @@ Content-Type: application/json
   "id": 1,
   "name": "João Silva Atualizado",
   "cep": "01001-000",
-  "logradouro": "Praça da Sé",
-  "bairro": "Sé",
-  "cidade": "São Paulo",
-  "estado": "SP",
+  "street": "Praça da Sé",
+  "neighborhood": "Sé",
+  "city": "São Paulo",
+  "state": "SP",
   "createdAt": "2024-01-01T00:00:00.000Z",
   "updatedAt": "2024-01-01T12:00:00.000Z"
 }
@@ -388,30 +388,6 @@ GET http://localhost:3005/pokemon/type/fire
 
 ---
 
-### Importar Pokémons da API
-```http
-POST http://localhost:3005/pokemon/import?limit=50
-```
-
-**Resposta:**
-```json
-[
-  {
-    "id": 1,
-    "name": "bulbasaur",
-    "pokedex_number": 1
-  },
-  {
-    "id": 2,
-    "name": "ivysaur",
-    "pokedex_number": 2
-  }
-]
-```
-
-**Nota:** Importa os primeiros N pokémons da PokeAPI e salva no banco.
-
----
 
 ### Deletar Pokémon do Banco
 ```http
@@ -467,10 +443,10 @@ GET http://localhost:3005/teams/1/trainer
   "id": 1,
   "name": "João Silva",
   "cep": "01310-100",
-  "logradouro": "Av. Paulista",
-  "bairro": "Bela Vista",
-  "cidade": "São Paulo",
-  "estado": "SP"
+  "street": "Av. Paulista",
+  "neighborhood": "Bela Vista",
+  "city": "São Paulo",
+  "state": "SP"
 }
 ```
 
@@ -720,4 +696,4 @@ GET http://localhost:3005/teams/pokemon/25
 
 ---
 
-**Documentação gerada em:** 2024-01-01
+**Documentação gerada em:** 27/11/2025

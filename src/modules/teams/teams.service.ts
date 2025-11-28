@@ -313,8 +313,7 @@ export class TeamsService {
 
     const teamPokemons = await this.teamPokemonsRepository.find({
       where: { team: { id: teamId } },
-      relations: ['pokemon'],
-      order: { position: 'ASC' },
+      relations: ['pokemon']
     });
 
     return teamPokemons.map(tp => tp.pokemon);

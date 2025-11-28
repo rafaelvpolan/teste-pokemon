@@ -1,5 +1,3 @@
-// trainers.entity.ts
-
 import { 
   Entity, 
   Column, 

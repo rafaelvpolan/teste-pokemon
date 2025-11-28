@@ -1,5 +1,3 @@
-// teams.controller.ts
-
 import { 
   Controller, 
   Get, 

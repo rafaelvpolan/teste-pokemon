@@ -1,5 +1,3 @@
-// teams.service.ts
-
 import { 
   Injectable, 
   NotFoundException, 

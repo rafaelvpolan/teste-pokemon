@@ -1,5 +1,3 @@
-// pokemon.entity.ts
-
 import { 
   Entity, 
   Column, 

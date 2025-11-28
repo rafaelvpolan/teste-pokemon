@@ -1,5 +1,3 @@
-// create-trainer.dto.ts
-
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsNotEmpty, Matches, Length } from 'class-validator';
 

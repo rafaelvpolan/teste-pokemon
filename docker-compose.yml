@@ -10,20 +10,7 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-  # app:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   container_name: app_nest
-  #   restart: always
-  #   ports:
-  #     - "3005:3005"
-  #   volumes:
-  #     - .:/usr/src/app
-  #     - /usr/src/app/node_modules
-  #   depends_on:
-  #     - mysql
-  #   env_file: .env
+
 
 volumes:
   mysql_data:

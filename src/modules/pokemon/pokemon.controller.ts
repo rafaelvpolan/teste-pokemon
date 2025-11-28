@@ -1,5 +1,3 @@
-// pokemon.controller.ts
-
 import { 
   Controller, 
   Get, 

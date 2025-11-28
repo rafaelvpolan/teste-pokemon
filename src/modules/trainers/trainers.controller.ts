@@ -1,5 +1,3 @@
-// trainers.controller.ts
-
 import { 
   Controller, 
   Get, 
